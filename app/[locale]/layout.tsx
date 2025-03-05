@@ -1,7 +1,7 @@
 import 'css/tailwind.css'
 import 'pliny/search/algolia.css'
 
-import { Space_Grotesk } from 'next/font/google'
+import { JetBrains_Mono, Nunito, Playpen_Sans, Space_Grotesk } from 'next/font/google'
 import { Analytics, AnalyticsConfig } from 'pliny/analytics'
 import { SearchProvider } from '@/components/search/SearchProvider'
 import Header from '@/components/navigation/Header'
@@ -14,6 +14,8 @@ import { Metadata } from 'next'
 import { dir } from 'i18next'
 import { LocaleTypes, locales } from './i18n/settings'
 import TwSizeIndicator from '@/components/helper/TwSizeIndicator'
+import clsx from 'clsx'
+import { TiltedGridBackground } from '@/components/ui/tilted-grid-background'
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -23,6 +25,29 @@ const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-space-grotesk',
+})
+
+const FONT_PLAYPEN_SANS = Playpen_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['800'],
+  variable: '--font-playpen-sans',
+})
+
+const FONT_NUNITO = Nunito({
+  subsets: ['latin'],
+  display: 'swap',
+  style: ['normal', 'italic'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-nunito',
+})
+
+const FONT_JETBRAINS_MONO = JetBrains_Mono({
+  weight: ['400', '500', '600'],
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-jetbrains-mono',
 })
 
 export async function generateMetadata({
@@ -89,10 +114,15 @@ export default async function RootLayout({
     <html
       lang={locale}
       dir={dir(locale)}
-      className={`${space_grotesk.variable} scroll-smooth`}
+      className={clsx(
+        'scroll-smooth',
+        FONT_NUNITO.variable,
+        FONT_JETBRAINS_MONO.variable,
+        FONT_PLAYPEN_SANS.variable
+      )}
       suppressHydrationWarning
     >
-      <link rel="apple-touch-icon" sizes="76x76" href="/static/favicons/apple-touch-icon.png" />
+      <link rel="apple-touch-icon" sizes="76x76" href="/static/favicons/favicon-96x96.png" />
       <link rel="icon" type="image/png" sizes="32x32" href="/static/favicons/favicon-32x32.png" />
       <link rel="icon" type="image/png" sizes="16x16" href="/static/favicons/favicon-16x16.png" />
       <link rel="manifest" href="/static/favicons/site.webmanifest" />
@@ -101,8 +131,17 @@ export default async function RootLayout({
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
       <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
-      <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
+      <body
+        className={clsx([
+          'antialiased',
+          'relative min-h-screen pl-[calc(100vw-100%)]',
+          'flex flex-col',
+          'bg-white text-neutral-900',
+          'dark:bg-dark dark:text-gray-100',
+        ])}
+      >
         <TwSizeIndicator />
+        <TiltedGridBackground className="inset-x-0 top-0 z-[-1] h-[50vh]" />
         <ThemeProvider>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
           <SectionContainer>

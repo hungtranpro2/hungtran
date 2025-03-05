@@ -24,6 +24,8 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
     .filter((a) => a.language === locale)
     .sort((a, b) => (a.default === b.default ? 0 : a.default ? -1 : 1)) as Authors[]
 
+  console.log(authors, 'authors')
+
   const authorSearchItems = authors.map((author) => {
     const { name, slug } = author
     return {

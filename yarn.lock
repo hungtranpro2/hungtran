@@ -5284,7 +5284,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^2.0.0":
+"clsx@npm:^2.0.0, clsx@npm:^2.1.1":
   version: 2.1.1
   resolution: "clsx@npm:2.1.1"
   checksum: cdfb57fa6c7649bbff98d9028c2f0de2f91c86f551179541cf784b1cfdc1562dcb951955f46d54d930a3879931a980e32a46b598acaea274728dbe068deca919
@@ -12798,6 +12798,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^8.18.0"
     "@waline/client": "npm:^3.4.2"
     autoprefixer: "npm:^10.4.20"
+    clsx: "npm:^2.1.1"
     contentlayer2: "npm:^0.5.3"
     cross-env: "npm:^7.0.3"
     esbuild: "npm:^0.25.0"

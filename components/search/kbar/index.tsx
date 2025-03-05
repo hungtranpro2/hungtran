@@ -44,6 +44,8 @@ export const KBarSearchProvider: FC<{
   const [searchActions, setSearchActions] = useState<Action[]>([])
   const [dataLoaded, setDataLoaded] = useState(false)
 
+  console.log(searchDocumentsPath, 'searchDocumentsPath')
+
   useEffect(() => {
     const mapPosts = (posts: CoreContent<MDXDocument>[]) => {
       const actions: Action[] = []
@@ -66,6 +68,7 @@ export const KBarSearchProvider: FC<{
             ? searchDocumentsPath
             : new URL(searchDocumentsPath, window.location.origin)
         const res = await fetch(url)
+
         const json = await res.json()
         const actions = onSearchDocumentsLoad ? onSearchDocumentsLoad(json) : mapPosts(json)
         setSearchActions(actions)

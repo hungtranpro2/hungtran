@@ -29,6 +29,7 @@ import rehypePresetMinify from 'rehype-preset-minify'
 import siteMetadata from './data/siteMetadata'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
 import { fallbackLng, secondLng } from './app/[locale]/i18n/locales'
+import prettier from 'prettier'
 
 const root = process.cwd()
 const isProduction = process.env.NODE_ENV === 'production'
@@ -52,7 +53,7 @@ const computedFields: ComputedFields = {
     type: 'string',
     resolve: (doc) => {
       // Split the flattenedPath by '/' and take the last part
-      const pathParts = doc._raw.flattenedPath.split('/');
+      const pathParts = doc._raw.flattenedPath.split('/')
       return pathParts.slice(2).join('/')
     },
   },
@@ -65,14 +66,14 @@ const computedFields: ComputedFields = {
     resolve: (doc) => doc._raw.sourceFilePath,
   },
   toc: { type: 'string', resolve: (doc) => extractTocHeadings(doc.body.raw) },
-};
+}
 
 /**
  * Count the occurrences of all tags across blog posts and write to json file
  * Add logic to your own locales and project
  */
 
-function createTagCount(allBlogs) {
+async function createTagCount(allBlogs) {
   const tagCount = {
     [fallbackLng]: {},
     [secondLng]: {},
@@ -91,7 +92,9 @@ function createTagCount(allBlogs) {
     }
   })
 
-  writeFileSync('./app/[locale]/tag-data.json', JSON.stringify(tagCount))
+  const formatted = await prettier.format(JSON.stringify(tagCount, null, 2), { parser: 'json' })
+
+  writeFileSync('./app/[locale]/tag-data.json', formatted)
 }
 
 function createSearchIndex(allBlogs) {
@@ -167,7 +170,7 @@ export const Authors = defineDocumentType(() => ({
   fields: {
     name: { type: 'string', required: true },
     language: { type: 'string', required: true },
-    default: {type: 'boolean'},
+    default: { type: 'boolean' },
     avatar: { type: 'string' },
     occupation: { type: 'string' },
     company: { type: 'string' },
@@ -213,7 +216,7 @@ export default makeSource({
   },
   onSuccess: async (importData) => {
     const { allBlogs } = await importData()
-    createTagCount(allBlogs)
+    await createTagCount(allBlogs)
     createSearchIndex(allBlogs)
   },
 })
